@@ -1,0 +1,1073 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Alternative POC Testing - Clear Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .section h2 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions {
+            background: #e8f0fe;
+            border: 1px solid #4285f4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            color: #1a73e8;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+        }
+
+        .required-indicator {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .required-indicator strong {
+            color: #856404;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #3c4043;
+        }
+
+        .required {
+            color: #d93025;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 1px #1a73e8;
+        }
+
+        .platform-selector {
+            display: flex;
+            background: #e8f0fe;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 30px;
+        }
+
+        .platform-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .platform-btn.active {
+            background: #1a73e8;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .platform-content {
+            display: none;
+        }
+
+        .platform-content.active {
+            display: block;
+        }
+
+        .feature-category {
+            margin-bottom: 30px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: #1a73e8;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .priority-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .feature-list {
+            background: white;
+        }
+
+        .feature-item {
+            padding: 20px;
+            border-bottom: 1px solid #f1f3f4;
+            position: relative;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-item.incomplete {
+            background: #fef7e0;
+            border-left: 4px solid #f9c74f;
+        }
+
+        .feature-item.complete {
+            background: #e8f5e8;
+            border-left: 4px solid #34a853;
+        }
+
+        .feature-header {
+            margin-bottom: 15px;
+        }
+
+        .feature-name {
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 5px;
+        }
+
+        .feature-description {
+            color: #5f6368;
+            font-size: 0.9em;
+        }
+
+        .rating-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .rating-section {
+            position: relative;
+        }
+
+        .rating-section.required::after {
+            content: "*";
+            color: #d93025;
+            font-weight: bold;
+            font-size: 1.2em;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            color: #ddd;
+        }
+
+        .star:before {
+            content: "★";
+        }
+
+        .star.active {
+            color: #ffc107;
+            text-shadow: 0 0 3px rgba(255, 193, 7, 0.5);
+        }
+
+        .star:hover {
+            color: #ffc107;
+            transform: scale(1.1);
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .score-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .btn-success {
+            background: #34a853;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2d9142;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            background: #e8eaed;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4285f4, #34a853);
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        .google-integration {
+            background: #e8f0fe;
+            border: 1px solid #4285f4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .google-integration h3 {
+            color: #1a73e8;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .debug-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin: 10px 0;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .completion-status {
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .completion-status.incomplete {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .completion-status.complete {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .rating-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Slack Alternative POC Testing</h1>
+            <p>Evaluating Mattermost & Rocket.chat as Enterprise Communication Solutions</p>
+        </div>
+
+        <div class="content">
+            <!-- Instructions Section -->
+            <div class="instructions">
+                <h3>📋 How to Complete This Testing</h3>
+                <ul>
+                    <li><strong>Fill in your information</strong> (name and email are required)</li>
+                    <li><strong>Test both platforms:</strong> Mattermost and Rocket.chat</li>
+                    <li><strong>For each feature you test:</strong>
+                        <ul>
+                            <li>⭐ <strong>Rate it 1-5 stars</strong> (required)</li>
+                            <li>✅ <strong>Select if it works as expected</strong> (required)</li>
+                            <li>💬 <strong>Add comments</strong> (optional but helpful)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Save your results</strong> to Google Sheets when done</li>
+                </ul>
+                
+                <div class="required-indicator">
+                    <strong>⚠️ Important:</strong> Both the star rating AND "Works as Expected" dropdown are required for each feature to count toward completion. Features with missing ratings won't be saved.
+                </div>
+            </div>
+
+            <!-- Google Integration Section -->
+            <div class="google-integration">
+                <h3>📊 TELUS Google Workspace Integration</h3>
+                <p>This testing sheet automatically saves your results to Google Sheets for analysis and reporting.</p>
+                <div class="debug-info" id="debugInfo">Debug info will appear here</div>
+            </div>
+
+            <!-- Tester Information -->
+            <div class="section">
+                <h2>👤 Tester Information</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="testerName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="testerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testerEmail">Email Address <span class="required">*</span></label>
+                        <input type="email" id="testerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department/Team</label>
+                        <input type="text" id="department">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role/Position</label>
+                        <input type="text" id="role">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="slackUsage">Current Slack Usage Level</label>
+                    <select id="slackUsage">
+                        <option value="">Select usage level</option>
+                        <option value="heavy">Heavy User (Daily, multiple hours)</option>
+                        <option value="moderate">Moderate User (Daily, 1-2 hours)</option>
+                        <option value="light">Light User (Few times per week)</option>
+                        <option value="occasional">Occasional User (Monthly or less)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Platform Selection -->
+            <div class="platform-selector">
+                <button class="platform-btn active" onclick="switchPlatform('mattermost')">
+                    📱 Test Mattermost
+                
+                </button>
+                <button class="platform-btn" onclick="switchPlatform('rocketchat')">
+                    🚀 Test Rocket.chat
+                </button>
+            </div>
+
+            <!-- Platform Testing Content -->
+            <div id="mattermost-content" class="platform-content active">
+                <div class="section">
+                    <h2>📱 Mattermost Feature Testing</h2>
+                    <div id="mattermost-features"></div>
+                </div>
+            </div>
+
+            <div id="rocketchat-content" class="platform-content">
+                <div class="section">
+                    <h2>🚀 Rocket.chat Feature Testing</h2>
+                    <div id="rocketchat-features"></div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="summary-card">
+                <h2>📊 Testing Progress & Results</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p id="progressText">Start testing to see your progress</p>
+                
+                <div class="score-grid">
+                    <div class="score-item">
+                        <div class="score-value" id="mattermostScore">-</div>
+                        <div class="score-label">Mattermost</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value" id="rocketchatScore">-</div>
+                        <div class="score-label">Rocket.chat</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value" id="completionRate">0%</div>
+                        <div class="score-label">Complete</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="saveToGoogleSheets()">
+                        💾 Save to Google Sheets
+                    </button>
+                    <button class="btn btn-success" onclick="generateReport()">
+                        📄 Generate Report
+                    </button>
+                    <button class="btn btn-primary" onclick="debugForm()">
+                        🔍 Debug Form Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TELUS Apps Script Backend URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/telus.com/s/AKfycbxOT6kO-d4Ir0NxulFBCg1V-KFe5UNao5mwRQ1iQoO3Dh_lRZPq3Hc5c4FATePT1gvloA/exec';
+
+        // Simplified feature set optimized for Google Sites
+        const features = {
+            'Core Messaging': {
+                priority: 'mandatory',
+                items: [
+                    { name: 'Direct Messages', desc: 'Private 1:1 messaging' },
+                    { name: 'Group Channels', desc: 'Team channels and group chats'  },
+                    { name: 'Message Search', desc: 'Search through message history' },
+                    { name: 'Message Threading', desc: 'Organized reply threads' },
+                    { name: 'File Sharing', desc: 'Share documents and images' }
+                ]
+            },
+            'Communication': {
+                priority: 'mandatory',
+                items: [
+                    { name: 'Voice Calls', desc: 'Audio calling functionality' },
+                    { name: 'Video Calls', desc: 'Video conferencing' },
+                    { name: 'Screen Sharing', desc: 'Share screen during calls' },
+                    { name: 'Notifications', desc: 'Push and desktop notifications' },
+                    { name: 'Mobile App', desc: 'Mobile application quality' }
+                ]
+            },
+            'Security & Admin': {
+                priority: 'mandatory',
+                items: [
+                    { name: 'User Management', desc: 'Add/remove users and permissions' },
+                    { name: 'Security Features', desc: 'Encryption and authentication' },
+                    { name: 'Integration Options', desc: 'Third-party app integrations' },
+                    { name: 'Data Export', desc: 'Export and backup capabilities' },
+                    { name: 'Guest Access', desc: 'External user access controls' }
+                ]
+            },
+            'User Experience': {
+                priority: 'nice-to-have',
+                items: [
+                    { name: 'Interface Design', desc: 'Overall UI/UX quality' },
+                    { name: 'Customization', desc: 'Themes and personalization' },
+                    { name: 'Performance', desc: 'Speed and responsiveness' },
+                    { name: 'Learning Curve', desc: 'Ease of adoption from Slack' },
+                    { name: 'Support & Docs', desc: 'Help resources and documentation' }
+                ]
+            }
+        };
+
+        let currentPlatform = 'mattermost';
+        let testData = {
+            tester: {},
+            mattermost: {},
+            rocketchat: {}
+        };
+
+        function initializeFeatures() {
+            const platforms = ['mattermost', 'rocketchat'];
+            
+            platforms.forEach(platform => {
+                const container = document.getElementById(`${platform}-features`);
+                container.innerHTML = '';
+                
+                Object.entries(features).forEach(([categoryName, category]) => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'feature-category';
+                    
+                    categoryDiv.innerHTML = `
+                        <div class="category-header">
+                            <span>${categoryName}</span>
+                            <span class="priority-badge">${category.priority}</span>
+                        </div>
+                        <div class="feature-list">
+                            ${category.items.map((item, index) => `
+                                <div class="feature-item" id="${platform}-${categoryName}-${index}">
+                                    <div class="feature-header">
+                                        <div class="feature-name">${item.name}</div>
+                                        <div class="feature-description">${item.desc}</div>
+                                    </div>
+                                    <div class="rating-grid">
+                                        <div class="rating-section required">
+                                            <label>Rating (1-5) <span class="required">*</span>:</label>
+                                            <div class="rating-stars" data-platform="${platform}" data-category="${categoryName}" data-feature="${index}">
+                                                ${[1,2,3,4,5].map(star => `<span class="star" data-rating="${star}"></span>`).join('')}
+                                            </div>
+                                        </div>
+                                        <div class="rating-section required">
+                                            <label>Works as Expected <span class="required">*</span>:</label>
+                                            <select data-platform="${platform}" data-category="${categoryName}" data-feature="${index}" data-type="works">
+                                                <option value="">Select</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="partial">Partially</option>
+                                                <option value="no">No</option>
+                                                <option value="not-tested">Not Tested</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>Comments:</label>
+                                            <textarea data-platform="${platform}" data-category="${categoryName}" data-feature="${index}" data-type="comments" placeholder="Your feedback..." rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="completion-status incomplete" id="status-${platform}-${categoryName}-${index}">
+                                        ⚠️ Incomplete: Please add star rating and select if it works
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    container.appendChild(categoryDiv);
+                });
+            });
+            
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            // Fixed star ratings with proper visual feedback
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const rating = parseInt(this.dataset.rating);
+                    const container = this.parentElement;
+                    const platform = container.dataset.platform;
+                    const category = container.dataset.category;
+                    const feature = container.dataset.feature;
+                    
+                    console.log('Star clicked:', {platform, category, feature, rating});
+                    
+                    // Update visual stars
+                    const allStars = container.querySelectorAll('.star');
+                    allStars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    // Save rating data
+                    if (!testData[platform][category]) testData[platform][category] = {};
+                    if (!testData[platform][category][feature]) testData[platform][category][feature] = {};
+                    testData[platform][category][feature].rating = rating;
+                    
+                    updateFeatureStatus(platform, category, feature);
+                    updateProgress();
+                });
+                
+                // Add hover effect
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    const container = this.parentElement;
+                    const allStars = container.querySelectorAll('.star');
+                    
+                    allStars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#ffc107';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseleave', function() {
+                    const container = this.parentElement;
+                    const platform = container.dataset.platform;
+                    const category = container.dataset.category;
+                    const feature = container.dataset.feature;
+                    
+                    // Restore actual rating visual state
+                    const currentRating = testData[platform] && testData[platform][category] && testData[platform][category][feature] && testData[platform][category][feature].rating || 0;
+                    const allStars = container.querySelectorAll('.star');
+                    
+                    allStars.forEach((s, index) => {
+                        if (index < currentRating) {
+                            s.style.color = '#ffc107';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+
+            // Selects and textareas
+            document.querySelectorAll('select[data-platform], textarea[data-platform]').forEach(element => {
+                element.addEventListener('change', function() {
+                    const platform = this.dataset.platform;
+                    const category = this.dataset.category;
+                    const feature = this.dataset.feature;
+                    const type = this.dataset.type;
+                    
+                    if (!testData[platform][category]) testData[platform][category] = {};
+                    if (!testData[platform][category][feature]) testData[platform][category][feature] = {};
+                    testData[platform][category][feature][type] = this.value;
+                    
+                    updateFeatureStatus(platform, category, feature);
+                    updateProgress();
+                });
+            });
+
+            // Tester info
+            document.querySelectorAll('#testerName, #testerEmail, #department, #role, #slackUsage').forEach(element => {
+                element.addEventListener('input', function() {
+                    testData.tester[this.id] = this.value;
+                });
+                
+                element.addEventListener('change', function() {
+                    testData.tester[this.id] = this.value;
+                });
+            });
+        }
+
+        function updateFeatureStatus(platform, category, feature) {
+            const statusElement = document.getElementById(`status-${platform}-${category}-${feature}`);
+            const featureElement = document.getElementById(`${platform}-${category}-${feature}`);
+            const data = testData[platform][category] && testData[platform][category][feature];
+            
+            if (data && data.rating && data.works) {
+                statusElement.textContent = '✅ Complete: Ready to save';
+                statusElement.className = 'completion-status complete';
+                featureElement.className = 'feature-item complete';
+            } else {
+                const missing = [];
+                if (!data || !data.rating) missing.push('star rating');
+                if (!data || !data.works) missing.push('"works as expected"');
+                
+                statusElement.textContent = `⚠️ Missing: ${missing.join(' and ')}`;
+                statusElement.className = 'completion-status incomplete';
+                featureElement.className = 'feature-item incomplete';
+            }
+        }
+
+        function switchPlatform(platform) {
+            currentPlatform = platform;
+            
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.platform-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${platform}-content`).classList.add('active');
+        }
+
+        function updateProgress() {
+            let totalFeatures = 0;
+            let completedFeatures = 0;
+            
+            Object.values(features).forEach(category => {
+                totalFeatures += category.items.length * 2; // 2 platforms
+                
+                category.items.forEach((item, index) => {
+                    ['mattermost', 'rocketchat'].forEach(platform => {
+                        const categoryName = Object.keys(features).find(key => features[key] === category);
+                        if (testData[platform][categoryName] && testData[platform][categoryName][index]) {
+                            const featureData = testData[platform][categoryName][index];
+                            if (featureData.rating && featureData.works) {
+                                completedFeatures++;
+                            }
+                        }
+                    });
+                });
+            });
+            
+            const progressPercent = Math.round((completedFeatures / totalFeatures) * 100);
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+            document.getElementById('progressText').textContent = `${completedFeatures}/${totalFeatures} features completed (both rating and "works" required)`;
+            document.getElementById('completionRate').textContent = `${progressPercent}%`;
+            
+            updatePlatformScores();
+        }
+
+        function updatePlatformScores() {
+            ['mattermost', 'rocketchat'].forEach(platform => {
+                let totalScore = 0;
+                let totalWeight = 0;
+                
+                Object.entries(features).forEach(([categoryName, category]) => {
+                    category.items.forEach((item, index) => {
+                        if (testData[platform][categoryName] && testData[platform][categoryName][index]) {
+                            const featureData = testData[platform][categoryName][index];
+                            if (featureData.rating) {
+                                const weight = category.priority === 'mandatory' ? 2 : 1;
+                                totalScore += featureData.rating * weight;
+                                totalWeight += 5 * weight;
+                            }
+                        }
+                    });
+                });
+                
+                const score = totalWeight > 0 ? Math.round((totalScore / totalWeight) * 100) : 0;
+                document.getElementById(`${platform}Score`).textContent = `${score}%`;
+            });
+        }
+
+        function saveToGoogleSheets() {
+            // Get current tester data from form fields
+            const testerData = {
+                testerName: document.getElementById('testerName').value,
+                testerEmail: document.getElementById('testerEmail').value,
+                department: document.getElementByI('department').value,
+                role: document.getElementById('role').value,
+                slackUsage: document.getElementById('slackUsage').value
+            };
+            
+            // Validate required fields
+            if (!testerData.testerName || !testerData.testerEmail) {
+                alert('⚠️ Please fill in your name and email before saving.');
+                return;
+            }
+            
+            const submissions = [];
+            let incompleteCount = 0;
+            
+            // Prepare data for each platform/feature combination
+            ['mattermost', 'rocketchat'].forEach(platform => {
+                Object.entries(features).forEach(([categoryName, category]) => {
+                    category.items.forEach((item, index) => {
+                        const data = testData[platform][categoryName] && testData[platform][categoryName][index];
+                        if (data && (data.rating || data.works || data.comments)) {
+                            if (data.rating && data.works) {
+                                // Complete feature
+                                submissions.push({
+                                    testerName: testerData.testerName,
+                                    testerEmail: testerData.testerEmail,
+                                    department: testerData.department || '',
+                                    role: testerData.role || '',
+                                    slackUsage: testerData.slackUsage || '',
+                                    platform: platform,
+                                    category: categoryName,
+                                    feature: item.name,
+                                    rating: data.rating,
+                                    works: data.works,
+                                    comments: data.comments || ''
+                                });
+                            } else {
+                                // Incomplete feature
+                                incompleteCount++;
+                            }
+                        }
+                    });
+                });
+            });
+            
+            if (submissions.length === 0) {
+                alert('⚠️ No completed test data to save. Please complete some feature testing first.\n\nRemember: Both star rating AND "Works as Expected" are required for each feature.');
+                return;
+            }
+            
+            if (incompleteCount > 0) {
+                if (!confirm(`⚠️ You have ${incompleteCount} incomplete features (missing star rating or "works" selection).\n\nOnly ${submissions.length} complete features will be saved.\n\nContinue saving?`)) {
+                    return;
+                }
+            }
+            
+            // Show saving indicator
+            const saveButton = event.target;
+            const originalText = saveButton.textContent;
+            saveButton.textContent = '💾 Saving to Google Sheets...';
+            saveButton.disabled = true;
+            
+            // Send each submission to Google Sheets
+            let successCount = 0;
+            let errorCount = 0;
+            
+            const promises = submissions.map(submission => 
+                fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(submission)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                        console.error('Submission error:', result.error);
+                    }
+                })
+                .catch(error => {
+                    errorCount++;
+                    console.error('Network error:', error);
+                })
+            );
+            
+            Promise.all(promises).then(() => {
+                if (errorCount === 0) {
+                    alert(`✅ Success! Saved ${successCount} complete test results to Google Sheets.\n\nYour data is now available in the "Slack Alternative POC Results" spreadsheet.`);
+                    
+                    // Optional: Clear form data after successful save
+                    if (confirm('🗑️ Would you like to clear the form to start fresh?')) {
+                        location.reload();
+                    }
+                } else {
+                    alert(`⚠️ Partially successful: ${successCount} saved, ${errorCount} failed.\n\nPlease check your internet connection and try again for any missing data.`);
+                }
+            }).finally(() => {
+                // Restore button
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
+            });
+        }
+
+        function generateReport() {
+            const mattermostScore = document.getElementById('mattermostScore').textContent;
+            const rocketchatScore = document.getElementById('rocketchatScore').textContent;
+            const completion = document.getElementById('completionRate').textContent;
+            
+            const testerData = {
+                testerName: document.getElementById('testerName').value,
+                testerEmail: document.getElementById('testerEmail').value,
+                department: document.getElementById('department').value
+            };
+            
+            let report = `# Slack Alternative Testing Report\n\n`;
+            report += `**Tester:** ${testerData.testerName || 'N/A'}\n`;
+            report += `**Email:** ${testerData.testerEmail || 'N/A'}\n`;
+            report += `**Department:** ${testerData.department || 'N/A'}\n`;
+            report += `**Date:** ${new Date().toLocaleDateString()}\n`;
+            report += `**Completion Rate:** ${completion}\n\n`;
+            
+            report += `## Overall Scores\n`;
+            report += `- **Mattermost:** ${mattermostScore}\n`;
+            report += `- **Rocket.chat:** ${rocketchatScore}\n\n`;
+            
+            report += `## Detailed Feedback\n\n`;
+            
+            Object.entries(features).forEach(([categoryName, category]) => {
+                report += `### ${categoryName} (${category.priority.toUpperCase()})\n\n`;
+                
+                category.items.forEach((item, index) => {
+                    report += `#### ${item.name}\n`;
+                    
+                    ['mattermost', 'rocketchat'].forEach(platform => {
+                        if (testData[platform][categoryName] && testData[platform][categoryName][index]) {
+                            const data = testData[platform][categoryName][index];
+                            report += `**${platform.charAt(0).toUpperCase() + platform.slice(1)}:**\n`;
+                            report += `- Rating: ${data.rating || 'Not rated'}/5\n`;
+                            report += `- Works as Expected: ${data.works || 'Not tested'}\n`;
+                            if (data.comments) {
+                                report += `- Comments: ${data.comments}\n`;
+                            }
+                            report += `\n`;
+                        }
+                    });
+                });
+            });
+            
+            const blob = new Blob([report], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `slack-alternative-report-${testerData.testerName || 'user'}-${new Date().toISOString().split('T')[0]}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Debug function to help troubleshoot
+        function debugForm() {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.style.display = 'block';
+            
+            const testerData = {
+                testerName: document.getElementById('testerName').value,
+                testerEmail: document.getElementById('testerEmail').value,
+                department: document.getElementById('department').value,
+                role: document.getElementById('role').value,
+                slackUsage: document.getElementById('slackUsage').value
+            };
+            
+            debugInfo.innerHTML = `
+                <strong>Debug Information:</strong><br>
+                <strong>Tester Data:</strong><br>
+                <pre>${JSON.stringify(testerData, null, 2)}</pre>
+                <strong>Test Data:</strong><br>
+                <pre>${JSON.stringify(testData, null, 2)}</pre>
+                <strong>Apps Script URL:</strong> ${APPS_SCRIPT_URL}
+            `;
+            
+            console.log('Debug - Tester Data:', testerData);
+            console.log('Debug - Test Data:', testData);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFeatures();
+            console.log('Application initialized');
+        });
+    </script>
+</body>
+</html>
